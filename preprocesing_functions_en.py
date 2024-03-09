@@ -3,6 +3,11 @@
 # Import knihoven
 import re
 from num2words import num2words
+import sys
+
+# Definuji si argumenty
+if len(sys.argv <3 ): print("Usage: python preprocessing_functinon.py <lang> <file>"); exit()
+if sys.argv[1] not in ["cs", "en"]: print("Only allowed languages: cs, en"); exit()
 
 # Fce, která prohledá text a najde všechny speciální (neobvyklé) znaky v textu
 def najdi_spec_znaky(text):
@@ -37,10 +42,10 @@ def nacti_soubor_vypis_spec_znaky(cesta):
         print(f"Soubor '{cesta}' nebyl nalezen.")
 
 # Definice fce pro nahrazení spec. znaků v textu jejich přepisem v angličtině
-def nahrad_spec_znaky(cesta):
+def nahrad_spec_znaky(cesta, jazyk):
 
     # Vytvořím si slovník s přepisem často používaných znaků (možno upravit podle konkrétní knihy)
-    slovnik = {
+    slovnik_en = {
         '+': 'plus',
         '€': ' Euro',
         '£': ' Pound',
@@ -62,22 +67,58 @@ def nahrad_spec_znaky(cesta):
         '…': 'Ellipsis',
     }
 
+    slovnik_cs = {
+        '+': 'plus',
+        '€': ' euro',
+        '£': ' libra',
+        '%': ' procento',
+        '>': ' větší než',
+        '$': ' dolar',
+        '=': ' rovná se',
+        '&': ' a',
+        '|': ' paralelně s',
+        '/': ' v poměru k',
+        '~': ' vlnovka',
+        '×': ' krát',
+        '−': ' minus',
+        '°': ' stupeň',
+        '√': ' druhá odmocnina',
+        '*': ' hvězdička',
+        '_': ' podtržítko',
+        '□': ' čtverec',
+        '...': ' trojtečka',
+}
+
     # Zkousím soubor otevřít
     try:
         with open(cesta, 'r', encoding='utf-8') as soubor:
             # Načtu text ze souboru do proměnné text
             text = soubor.read()
 
-        # Iteruji slovník se spec. znaky a přepisy
-        for znak, prepis in slovnik.items():
-            # Pro každou iteraci provedu nahrazení v textu
-            text = text.replace(znak, prepis)
-        
-        # Zapíši změny do souboru
-        with open(cesta, 'w') as soubor:
-            soubor.write(text)
+        if jazyk == "cs":
+            # Iteruji slovník se spec. znaky a přepisy
+            for znak, prepis in slovnik_cs.items():
+                # Pro každou iteraci provedu nahrazení v textu
+                text = text.replace(znak, prepis)
 
-        print(f"Znaky v souboru '{cesta}' byly nahrazeny a změny uloženy.")
+            # Zapíši změny do souboru
+            with open(cesta, 'w') as soubor:
+                soubor.write(text)
+
+            print(f"Znaky v souboru '{cesta}' byly nahrazeny a změny uloženy.")
+
+        elif jazyk == "en":
+            # Iteruji slovník se spec. znaky a přepisy
+            for znak, prepis in slovnik_en.items():
+                # Pro každou iteraci provedu nahrazení v textu
+                text = text.replace(znak, prepis)
+
+            # Zapíši změny do souboru
+            with open(cesta, 'w') as soubor:
+                soubor.write(text)
+
+            print(f"Znaky v souboru '{cesta}' byly nahrazeny a změny uloženy.")
+
 
     # Pokud soubor nebyl nalezen, vypiš chybovou hlášku
     except FileNotFoundError:

@@ -11,7 +11,7 @@ from preprocesing_functions_en import nacti_soubor_vypis_spec_znaky, najdi_spec_
 def nahrad_spec_znaky(cesta):
 
     # Vytvořím si slovník s přepisem často používaných znaků (možno upravit podle konkrétní knihy)
-    slovnik = {
+    slovnik_cs = {
         '+': 'plus',
         '€': ' euro',
         '£': ' libra',
@@ -32,6 +32,28 @@ def nahrad_spec_znaky(cesta):
         '□': ' čtverec',
         '...': ' trojtečka',
 }
+
+    slovnik_en = {
+        '+': 'plus',
+        '€': ' Euro',
+        '£': ' Pound',
+        '%': 'percent',
+        '>': 'greater than',
+        '$': 'dollar ',
+        '=': 'equals',
+        '&': 'and',
+        '|': 'or',
+        '/': ' in proportion to ',
+        '~': 'tilde',
+        '×': 'times',
+        '−': 'minus',
+        '°': 'degree',
+        '√': 'Square root',
+        '*': 'asterisk',
+        '_': 'Underscore',
+        '□': 'Square symbol',
+        '…': 'Ellipsis',
+    }
 
     # Zkousím soubor otevřít
     try:
