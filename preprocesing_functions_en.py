@@ -138,3 +138,24 @@ def nahrad_cisla_slovy(cesta):
     # Pokud soubor nebyl nalezen, vypiš chybovou hlášku
     except FileNotFoundError:
         print(f"Soubor '{cesta}' nebyl nalezen.")
+
+
+# Definice fce pro odstranění prázdných řádek v textu
+def odstran_prazde_radky(cesta):
+    try:
+        # Načtu si textový soubor do proměnné podle cesty
+        with open(cesta, 'r') as soubor:
+            text = soubor.read()
+
+        # Nahradím dvojité nové řádky (\n\n) jednoduchými novými řádky (\n), čímž odstraním prázdné řádky
+        text = text.replace('\n\n', '\n')
+
+        # Zapíši změny do souboru
+        with open(cesta, 'w') as soubor:
+            soubor.write(text)
+        
+        print(f"Prázdné řádky byly odstraněny ze souboru v {cesta}.")
+    
+    # Pokud soubor nebyl nalezen, vypiš chybovou hlášku
+    except souborNotFoundError:
+        print(f"Soubor '{cesta}' nebyl nalezen.")
