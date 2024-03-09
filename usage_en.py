@@ -1,0 +1,9 @@
+from preprocesing_functions_en import nahrad_cisla_slovy, nahrad_spec_znaky, zmensi_pismena, nacti_soubor_vypis_spec_znaky
+
+cesta = 'data/Sri_Ramana_Maharshi,_David_Godman_-_Be_as_You_Are__The_Teachings_of_Sri_Ramana_Maharshi-Penguin_Books_Ltd.txt'
+
+#nacti_soubor_vypis_spec_znaky(cesta)
+
+zmensi_pismena(cesta)
+nahrad_cisla_slovy(cesta)
+nahrad_spec_znaky(cesta)
