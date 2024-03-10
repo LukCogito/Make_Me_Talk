@@ -10,13 +10,10 @@ jazyk=$2
 if [ $# -lt 2 ]; then
     echo "Usage: ./synthesis.sh <language> <input_file>" >&2
     exit 1
-elif [[ ! -f "${cesta_vstup}" ]]; then
+elif [ ! -f "${cesta_vstup}" ]; then
     echo "Input file ${cesta_vstup} does not exist." >&2
     exit 1
 else
-    jazyk="$1"
-    cesta_vstup="$2"
-
     case "$jazyk" in
         en | cs ) ;;
         * ) echo "Invalid language '$jazyk'; must be 'en' or 'cs'" >&2; exit 1;;
@@ -35,7 +32,7 @@ cesta_vystup="./ebook_synthesis/${jmeno_souboru}.wav"
 echo "Cesta k výstupnímu souboru: $cesta_vystup"
 
 # Pokud je kniha česky
-if [["$jazyk" == "cs"]]; then
+if [ "$jazyk" = "cs" ]; then
   # Připrav příkaz pro syntézu v češtině
   cmd='tts --text "${radky[$i]}" --model_name "tts_models/cs/cv/vits" --out_path "./data/temp/audio${i}.wav"'
 # V opačném příápadě
@@ -50,8 +47,8 @@ for (( i=0; i<${#radky[@]}; i++ )); do
   $(eval $cmd)
   echo  "./data/temp/audio${i}.wav" >> ./data/temp/concat.txt
 done
-echo $cesta_vstup >> ./data/temp/concat.txt
+echo $cesta_vystup >> ./data/temp/concat.txt
 
 # Nakonec spojím pomocí sox dílčí segmenty a vytvořím tak komplet
-cat ./data/temp/concat.txt | xargs sox $cesta_vystup
+cat ./data/temp/concat.txt | xargs sox
 rm -rf ./data/temp/
