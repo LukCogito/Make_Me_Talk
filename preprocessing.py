@@ -5,13 +5,15 @@ import re
 from num2words import num2words
 import sys
 
+# Ověřím správnost zadaných argumentů
 if len(sys.argv) < 3:
-    print("Usage: python preprocesing_functions.py <language> <input_file>")
+    print("Usage: python3 preprocesing_functions.py <language> <input_file>")
     sys.exit(1)
 if sys.argv[1] not in ["en", "cs"]:
-    print("Language must be 'en' or 'cs'")
+    print(f"Invalid language '{sys.argv[1]}'; language must be 'en' or 'cs'.")
     sys.exit(1)
 
+# Otestuji, jestli zadaný soubor existuje
 try:
     with open(sys.argv[2], 'r', encoding='utf-8') as soubor:
         pass
