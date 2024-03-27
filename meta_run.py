@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, sys, datetime
+import os, sys
+from datetime import datetime
 
 def qsub(script_name, out_dir, script_params={}):
     """
