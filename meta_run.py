@@ -33,4 +33,6 @@ params = {
     "HOME": os.environ["HOME"]
 }
 
+script_name = os.path.join(os.path.dirname(__file__), script_name)
+
 print(qsub(script_name, outdir, params))
