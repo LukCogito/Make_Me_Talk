@@ -38,7 +38,7 @@ if [ "$jazyk" = "cs" ]; then
 # V opačném příápadě
 else
   # Připrav příkaz pro syntézu v angličtině
-  cmd='cat "${radky[$i]}" | mimic3 > "./data/temp/audio${i}.wav"'
+  cmd='echo "${radky[$i]}" | mimic3 > "./data/temp/audio${i}.wav"'
 fi
 
 # Procházím pole položku po položce (procházím text řádku po řádce)
