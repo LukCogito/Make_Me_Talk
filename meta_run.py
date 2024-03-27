@@ -18,7 +18,7 @@ def qsub(script_name, out_dir, script_params={}):
     output = stream.read()
     return output
 
-metarunner_dir = "~/metalogs"
+metarunner_dir = os.environ["HOME"] + "/metalogs"
 outdir = f"{metarunner_dir}/{datetime.now().strftime('%y-%m-%d/%H-%M')}"
 
 if len(sys.argv) < 4:
