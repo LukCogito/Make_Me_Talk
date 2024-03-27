@@ -17,7 +17,6 @@ def qsub(script_name, out_dir, script_params={}):
     output = stream.read()
     return output
 
-script_name = "meta_script.sh"
 metarunner_dir = "~/metalogs"
 outdir = f"{metarunner_dir}/{datetime.now().strftime('%y-%m-%d/%H-%M')}"
 
@@ -25,6 +24,8 @@ if len(sys.argv) < 4:
     print("Usage: python3 meta_run.py <script> <book_path> <lang>")
     sys.exit(1)
 
+script_name = sys.argv[1]       # will be used later, once there's script for coquiAI
+script_name = "meta_script.sh"
 params = {
     "BOOK": sys.argv[2],
     "LANG": sys.argv[3],
