@@ -168,16 +168,11 @@ def nahrad_cisla_slovy(cesta):
 # Definice fce pro odstranění prázdných řádek v textu
 def odstran_prazde_radky(cesta):
     # Načtu si textový soubor do proměnné podle cesty
-    with open(cesta, 'r') as soubor:
-        text = soubor.read()
-
-    # Nahradím dvojité nové řádky (\n\n) jednoduchými novými řádky (\n), čímž odstraním prázdné řádky
-    text = text.replace('\n\n', '\n')
-
-    # Zapíši změny do souboru
-    with open(cesta, 'w') as soubor:
-        soubor.write(text)
-    
+    with open(cesta, 'rw') as soubor:
+        text = soubor.readlines()
+        # Použiji lamda (syntax pro zápis fce na jednu řádku) k filtrování prázdných řádek; převádím na list, protože filter vrací jiný datový typ
+        text = list(filter(lambda s: s != "\n"))
+        soubor.writelines(text)
     print(f"Prázdné řádky byly odstraněny ze souboru v {cesta}.")
 
 
