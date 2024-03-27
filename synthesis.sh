@@ -20,6 +20,10 @@ else
     esac
 fi
 
+if [ -z "$TMPDIR" ]; then
+  TMPDIR="./data/tmp"
+fi
+
 # Namapuji obsah txt souboru do pole, kde bude každá jedna řádka samostatným prvkem
 mapfile -t radky < "$cesta_vstup"
 
@@ -34,21 +38,20 @@ echo "Cesta k výstupnímu souboru: $cesta_vystup"
 # Pokud je kniha česky
 if [ "$jazyk" = "cs" ]; then
   # Připrav příkaz pro syntézu v češtině
-  cmd='tts --text "${radky[$i]}" --model_name "tts_models/cs/cv/vits" --out_path "./data/temp/audio${i}.wav"'
+  cmd='tts --text "${radky[$i]}" --model_name "tts_models/cs/cv/vits" --out_path "$TMPDIR/audio${i}.wav"'
 # V opačném příápadě
 else
   # Připrav příkaz pro syntézu v angličtině
-  cmd='echo "${radky[$i]}" | mimic3 > "./data/temp/audio${i}.wav"'
+  cmd='echo "${radky[$i]}" | mimic3 > "$TMPDIR/audio${i}.wav"'
 fi
 
 # Procházím pole položku po položce (procházím text řádku po řádce)
 for (( i=0; i<${#radky[@]}; i++ )); do
   # Pro každou jednu iteraci provedu syntézu a indexovaný výstup uložím do adresáře temp
   $(eval $cmd)
-  echo  "./data/temp/audio${i}.wav" >> ./data/temp/concat.txt
+  echo  "file '$TMPDIR/audio${i}.wav'" >> $TMPDIR/concat.txt
 done
-echo $cesta_vystup >> ./data/temp/concat.txt
 
 # Nakonec spojím pomocí sox dílčí segmenty a vytvořím tak komplet
-cat ./data/temp/concat.txt | xargs sox
-rm -rf ./data/temp/
+ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup
+rm -rf $TMPDIR/
