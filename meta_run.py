@@ -30,7 +30,7 @@ script_name = "meta_script.sh"
 params = {
     "BOOK": sys.argv[2],
     "LANG": sys.argv[3],
-    "HOME": os.environ["HOME"]
+    "HOMEDIR": os.environ["HOME"]
 }
 
 script_name = os.path.join(os.path.dirname(__file__), script_name)
