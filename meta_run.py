@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import os, sys
 from datetime import datetime
 
@@ -33,6 +33,6 @@ params = {
     "HOMEDIR": os.environ["HOME"]
 }
 
-script_name = os.path.join(os.path.dirname(__file__), script_name)
+script_name = os.environ["HOME"] + "/Make_Me_Talk/meta_script.sh"
 
 print(qsub(script_name, outdir, params))
