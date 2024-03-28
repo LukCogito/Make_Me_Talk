@@ -11,7 +11,7 @@ module add ffmpeg
 
 trap 'clean_scratch' EXIT TERM
 
-cd $HOME/Make_Me_Talk
+cd $HOME/Make_Me_Talk/metacentrum
 
 singularity exec              \
     docker://mycroftai/mimic3 \
