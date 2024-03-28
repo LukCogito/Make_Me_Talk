@@ -32,7 +32,7 @@ if len(sys.argv) < 4:
     sys.exit(1)
 
 script_name = sys.argv[1]       # will be used later, once there's script for coquiAI
-script_name = "meta_job_script.sh"
+script_name = f"{os.path.dirname(os.path.abspath(__file__))}/meta_job_script.sh"
 params = {
     "BOOK": sys.argv[2],
     "LANG": sys.argv[3],
