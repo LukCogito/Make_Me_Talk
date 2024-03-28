@@ -40,7 +40,7 @@ params = {
 }
 dry_run = False if len(sys.argv) < 5 else (sys.argv[4].lower() == "true")
 
-script_name = f"{os.path.dirname(os.path.realpath(__file__))}/{script_name}"
+script_name = os.path.abspath(script_name)
 
 try:
     print(qsub(script_name, outdir, params, dry_run=dry_run))
