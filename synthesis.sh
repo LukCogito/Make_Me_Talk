@@ -54,4 +54,4 @@ done
 
 # Nakonec spojím pomocí sox dílčí segmenty a vytvořím tak komplet
 ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup
-rm -rf $TMPDIR/
+rm -rf $TMPDIR/ 2>/dev/null
