@@ -41,6 +41,7 @@ params = {
 dry_run = False if len(sys.argv) < 5 else (sys.argv[4].lower() == "true")
 
 script_name = os.path.abspath(script_name)
+params["BOOK"] = os.path.abspath(params["BOOK"])
 
 try:
     print(qsub(script_name, outdir, params, dry_run=dry_run))
