@@ -9,5 +9,5 @@ fi
 alias ffmpeg='/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/ffmpeg-4.4.1-4b4plvbiawhrdfbuycgpodkgdlpdcuot/bin/ffmpeg'
 
 cd ..
-./synthesis.sh $1 $2
+source ./synthesis.sh $1 $2
 
