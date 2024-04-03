@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# https://superuser.com/questions/708462/alias-scoping-in-bash-functions
+shopt -s expand_aliases
+
 if [ $2 = "en" ]; then
     alias mimic3='/home/mimic3/app/.venv/bin/mimic3'
 elif [ $2 = "cs" ]; then
