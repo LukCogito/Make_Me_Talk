@@ -53,5 +53,5 @@ for (( i=0; i<${#radky[@]}; i++ )); do
 done
 
 # Nakonec spojím pomocí sox dílčí segmenty a vytvořím tak komplet
-ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup
+ffmpeg -f concat --safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
 rm -rf $TMPDIR/ 2>/dev/null
