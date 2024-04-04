@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: použít `mimic3-server --preload-voice /usr/share/mycroft/mimic3/voices/n_UK/apope_low` a `mimic3 --remote`
+
 # https://superuser.com/questions/708462/alias-scoping-in-bash-functions
 shopt -s expand_aliases
 
