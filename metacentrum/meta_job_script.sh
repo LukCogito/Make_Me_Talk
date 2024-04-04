@@ -11,6 +11,7 @@ module add ffmpeg
 
 trap 'clean_scratch' EXIT TERM
 
+# TODO: generic path to Make_Me_Talk
 cd $HOME/Make_Me_Talk/metacentrum
 
 singularity exec              \

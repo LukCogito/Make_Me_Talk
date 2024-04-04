@@ -2,7 +2,7 @@
 import os, sys
 from datetime import datetime
 
-def qsub(script_name, out_dir, script_params={}, dry_run=False):
+def qsub(script_path, out_dir, script_params={}, dry_run=False):
     """
     Submit a job to the cluster using qsub.
     :param script_name: Name of the script to run
@@ -12,7 +12,7 @@ def qsub(script_name, out_dir, script_params={}, dry_run=False):
     """
     script_params = ','.join([f"{k}=\"{v}\"" for k, v in script_params.items()])
     script_params = f"-v {script_params}" if script_params else ''
-    cmd = f"cd {out_dir}; qsub { script_params } {script_name}"
+    cmd = f"cd {out_dir}; qsub { script_params } {script_path}"
 
     if dry_run:
         return cmd
