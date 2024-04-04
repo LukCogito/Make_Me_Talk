@@ -23,6 +23,9 @@ fi
 if [ -z "$TMPDIR" ]; then
   TMPDIR="./data/tmp"
 fi
+if [ -z "$OUTDIR" ]; then
+  OUTDIR="./ebook_synthesis"
+fi
 
 # Namapuji obsah txt souboru do pole, kde bude každá jedna řádka samostatným prvkem
 mapfile -t radky < "$cesta_vstup"
@@ -31,7 +34,8 @@ mapfile -t radky < "$cesta_vstup"
 jmeno_souboru=$(basename -s .txt "$cesta_vstup")
 
 # Vytvořím cestu k výstupnímu souboru
-cesta_vystup="./ebook_synthesis/${jmeno_souboru}.wav"
+mkdkir -p $OUTDIR
+cesta_vystup=".$OUTDIR/${jmeno_souboru}.wav"
 
 echo "Cesta k výstupnímu souboru: $cesta_vystup"
 
