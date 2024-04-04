@@ -14,6 +14,9 @@ trap 'clean_scratch' EXIT TERM
 # TODO: generic path to Make_Me_Talk
 cd $HOME/Make_Me_Talk/metacentrum
 
+#TODO
+# to run mimic server, use --pid
+# https://github.com/apptainer/singularity/issues/5884
 singularity exec              \
      -B /cvmfs                \
     docker://mycroftai/mimic3 \
