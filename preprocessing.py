@@ -5,29 +5,6 @@ import re
 from num2words import num2words
 import sys
 
-# Ověřím správnost zadaných argumentů
-# Pokud je argumentů méně než 3
-if len(sys.argv) < 3:
-    # Vypíši uživateli hlášku s instruktáží
-    print("Usage: python3 preprocessing.py <language> <input_file>")
-    # A ukončím s hláškou o přítomnosti problému (1 = je přítomen)
-    sys.exit(1)
-# Pokud druhý argument (jazyk) není en nebo cs
-if sys.argv[1] not in ["en", "cs"]:
-    # Vypíši uživateli hlášku s instruktáží
-    print(f"Invalid language '{sys.argv[1]}'; language must be 'en' or 'cs'.")
-    sys.exit(1)
-    # A ukončím s hláškou o přítomnosti problému
-
-# Otestuji, jestli zadaný soubor existuje
-try:
-    # Zkusím obsah souboru načíst do proměnné
-    with open(sys.argv[2], 'r', encoding='utf-8') as soubor:
-        pass
-# V případě výjimky vypíšu hlášku o chybě pro uživatele
-except FileNotFoundError:
-    print(f"File '{sys.argv[2]}' not found.")
-    sys.exit(1)
 
 slovnik_en = {
         '+': 'plus',
@@ -71,8 +48,6 @@ slovnik_cs = {
         '□': ' čtverec',
         '...': ' trojtečka',
 }
-# Zvolím odpovídající slovník v závislosti na volbě jazyka
-slovnik = slovnik_en if sys.argv[1] == "en" else slovnik_cs
 
 # Fce, která prohledá text a najde všechny speciální (neobvyklé) znaky v textu
 def najdi_spec_znaky(text):
@@ -102,7 +77,7 @@ def nacti_soubor_vypis_spec_znaky(cesta):
             print(znak)
 
 # Definice fce pro nahrazení spec. znaků v textu jejich přepisem v angličtině
-def nahrad_spec_znaky(cesta):
+def nahrad_spec_znaky(cesta, slovnik):
 
     # Zkousím soubor otevřít
     with open(cesta, 'r', encoding='utf-8') as soubor:
@@ -166,7 +141,7 @@ def nahrad_cisla_slovy(cesta):
     print(f"Čísla v souboru '{cesta}' byla nahrazena slovy a změny uloženy.")
 
 # Definice fce pro odstranění prázdných řádek v textu
-def odstran_prazde_radky(cesta):
+def odstran_prazdne_radky(cesta):
     # Načtu si textový soubor do proměnné podle cesty
     with open(cesta, 'rw') as soubor:
         text = soubor.readlines()
@@ -178,14 +153,42 @@ def odstran_prazde_radky(cesta):
 
 # Pokud je skript spuštěn samostatně (a nikoliv jako modul)
 if __name__ == "__main__":
+    # Ověřím správnost zadaných argumentů
+    # Pokud je argumentů méně než 3
+    if len(sys.argv) < 3:
+        # Vypíši uživateli hlášku s instruktáží
+        print("Usage: python3 preprocessing.py <language> <input_file>")
+        # A ukončím s hláškou o přítomnosti problému (1 = je přítomen)
+        sys.exit(1)
+    # Pokud druhý argument (jazyk) není en nebo cs
+    if sys.argv[1] not in ["en", "cs"]:
+        # Vypíši uživateli hlášku s instruktáží
+        print(f"Invalid language '{sys.argv[1]}'; language must be 'en' or 'cs'.")
+        sys.exit(1)
+        # A ukončím s hláškou o přítomnosti problému
+
+    # Otestuji, jestli zadaný soubor existuje
+    try:
+        # Zkusím obsah souboru načíst do proměnné
+        with open(sys.argv[2], 'r', encoding='utf-8') as soubor:
+            pass
+    # V případě výjimky vypíšu hlášku o chybě pro uživatele
+    except FileNotFoundError:
+        print(f"File '{sys.argv[2]}' not found.")
+        sys.exit(1)
+
+
+    # Zvolím odpovídající slovník v závislosti na volbě jazyka
+    slovnik = slovnik_en if sys.argv[1] == "en" else slovnik_cs
+
     # Vykonám odpovídající operace
     cesta = sys.argv[2]
     if sys.argv[1] == "en":
         print("Processing English text")
         zmensi_pismena(cesta)
         nahrad_cisla_slovy(cesta)
-        nahrad_spec_znaky(cesta)
+        nahrad_spec_znaky(cesta, slovnik)
     else:
         print("Processing Czech text")
         nahrad_cisla_slovy(cesta)
-        nahrad_spec_znaky(cesta)
+        nahrad_spec_znaky(cesta, slovnik)
