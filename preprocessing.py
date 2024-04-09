@@ -157,7 +157,7 @@ def preved_do_latin1(cesta, encoding='utf-8'):
         text = soubor.read()
     with open(cesta, 'w', encoding=encoding) as soubor:
         soubor.write(text.encode(encoding, 'ignore').decode(encoding))
-    print(f"Text v souboru '{cesta}' byl převeden do kódování Latin-1 a změny uloženy.")
+    print(f"Text v souboru '{cesta}' byl převeden do kódování {encoding} a změny uloženy.")
 
 
 # Pokud je skript spuštěn samostatně (a nikoliv jako modul)
@@ -191,6 +191,7 @@ if __name__ == "__main__":
     slovnik = slovnik_en if sys.argv[1] == "en" else slovnik_cs
 
     # Vykonám odpovídající operace
+    ENCODING="latin-1"
     cesta = sys.argv[2]
     print(f"Zpracovávám soubor '{cesta}'... v jazyce {sys.argv[1]}")
     zmensi_pismena(cesta)
