@@ -151,6 +151,14 @@ def odstran_prazdne_radky(cesta):
         soubor.writelines(text)
     print(f"Prázdné řádky byly odstraněny ze souboru v {cesta}.")
 
+def preved_do_latin1(cesta):
+    # Načtu si textový soubor do proměnné podle cesty
+    with open(cesta, 'r') as soubor:
+        text = soubor.read()
+    with open(cesta, 'w', encoding='latin1') as soubor:
+        soubor.write(text)
+    print(f"Text v souboru '{cesta}' byl převeden do kódování Latin-1 a změny uloženy.")
+
 
 # Pokud je skript spuštěn samostatně (a nikoliv jako modul)
 if __name__ == "__main__":
@@ -184,14 +192,9 @@ if __name__ == "__main__":
 
     # Vykonám odpovídající operace
     cesta = sys.argv[2]
-    if sys.argv[1] == "en":
-        print("Processing English text")
-        zmensi_pismena(cesta)
-        nahrad_cisla_slovy(cesta)
-        nahrad_spec_znaky(cesta, slovnik)
-        odstran_prazdne_radky(cesta)
-    else:
-        print("Processing Czech text")
-        nahrad_cisla_slovy(cesta)
-        nahrad_spec_znaky(cesta, slovnik)
-        odstran_prazdne_radky(cesta)
+    print(f"Zpracovávám soubor '{cesta}'... v jazyce {sys.argv[1]}")
+    zmensi_pismena(cesta)
+    nahrad_cisla_slovy(cesta)
+    nahrad_spec_znaky(cesta, slovnik)
+    preved_do_latin1(cesta)
+    odstran_prazdne_radky(cesta)
