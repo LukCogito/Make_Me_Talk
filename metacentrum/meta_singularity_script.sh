@@ -17,8 +17,9 @@ alias ffmpeg='/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86
 
 #https://github.com/danielgatis/rembg/issues/448
 export OMP_NUM_THREADS=$(nproc)
+export OUTDIR="$HOME/Make_Me_Talk/ebook_synthesis"
 
 cd ..
 source ./synthesis.sh $1 $2
-
+exit 0
 

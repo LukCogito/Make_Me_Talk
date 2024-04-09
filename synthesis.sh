@@ -35,7 +35,7 @@ jmeno_souboru=$(basename -s .txt "$cesta_vstup")
 
 # Vytvořím cestu k výstupnímu souboru
 mkdkir -p $OUTDIR
-cesta_vystup=".$OUTDIR/${jmeno_souboru}.wav"
+cesta_vystup="$OUTDIR/${jmeno_souboru}.wav"
 
 echo "Cesta k výstupnímu souboru: $cesta_vystup"
 
