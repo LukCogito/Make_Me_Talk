@@ -70,5 +70,5 @@ if [ "$jazyk" = "en" ]; then
 fi
 
 # Nakonec spojím pomocí ffmpeg dílčí segmenty a vytvořím tak komplet
-ffmpeg -f concat --safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
+ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
 rm -rf $TMPDIR/ 2>/dev/null

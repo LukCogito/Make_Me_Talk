@@ -170,30 +170,30 @@ if __name__ == "__main__":
         # A ukončím s hláškou o přítomnosti problému (1 = je přítomen)
         sys.exit(1)
     # Pokud druhý argument (jazyk) není en nebo cs
-    if sys.argv[1] not in ["en", "cs"]:
+    cesta, jazyk = sys.argv[1], sys.argv[2]
+    if jazyk not in ["en", "cs"]:
         # Vypíši uživateli hlášku s instruktáží
-        print(f"Invalid language '{sys.argv[1]}'; language must be 'en' or 'cs'.")
+        print(f"Invalid language '{jazyk}'; language must be 'en' or 'cs'.")
         sys.exit(1)
         # A ukončím s hláškou o přítomnosti problému
 
     # Otestuji, jestli zadaný soubor existuje
     try:
         # Zkusím obsah souboru načíst do proměnné
-        with open(sys.argv[2], 'r', encoding='utf-8') as soubor:
+        with open(cesta, 'r', encoding='utf-8') as soubor:
             pass
     # V případě výjimky vypíšu hlášku o chybě pro uživatele
     except FileNotFoundError:
-        print(f"File '{sys.argv[2]}' not found.")
+        print(f"File '{cesta}' not found.")
         sys.exit(1)
 
 
     # Zvolím odpovídající slovník v závislosti na volbě jazyka
-    slovnik = slovnik_en if sys.argv[1] == "en" else slovnik_cs
+    slovnik = slovnik_en if jazyk == "en" else slovnik_cs
 
     # Vykonám odpovídající operace
     ENCODING="latin-1"
-    cesta = sys.argv[2]
-    print(f"Zpracovávám soubor '{cesta}'... v jazyce {sys.argv[1]}")
+    print(f"Zpracovávám soubor '{cesta}'... v jazyce {jazyk}")
     zmensi_pismena(cesta)
     nahrad_cisla_slovy(cesta)
     nahrad_spec_znaky(cesta, slovnik)
