@@ -19,5 +19,6 @@ cd $HOME/Make_Me_Talk/metacentrum
 # https://github.com/apptainer/singularity/issues/5884
 singularity exec              \
      -B /cvmfs                \
+    --pid                     \
     docker://mycroftai/mimic3 \
     /bin/bash meta_singularity_script.sh $BOOK $LANG

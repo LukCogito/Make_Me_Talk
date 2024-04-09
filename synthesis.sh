@@ -45,9 +45,16 @@ if [ "$jazyk" = "cs" ]; then
   cmd='tts --text "${radky[$i]}" --model_name "tts_models/cs/cv/vits" --out_path "$TMPDIR/audio${i}.wav"'
 # V opačném příápadě
 else
+  # Spustím server pro syntézu
+  mimic3-server --preload-voice /usr/share/mycroft/mimic3/voices/n_UK/apope_low &
   # Připrav příkaz pro syntézu v angličtině
-  cmd='echo "${radky[$i]}" | mimic3 > "$TMPDIR/audio${i}.wav"'
+  cmd='echo "${radky[$i]}" | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
 fi
+
+# optional feature: paralelizace ??
+#cmd=$cmd' && echo "file $TMPDIR/audio${i}.wav" >> $TMPDIR/concat.txt'
+# pokud paralelizace, tak zde
+# cmd=$cmd' &'
 
 # Procházím pole položku po položce (procházím text řádku po řádce)
 for (( i=0; i<${#radky[@]}; i++ )); do
@@ -56,6 +63,11 @@ for (( i=0; i<${#radky[@]}; i++ )); do
   echo  "file '$TMPDIR/audio${i}.wav'" >> $TMPDIR/concat.txt
 done
 
-# Nakonec spojím pomocí sox dílčí segmenty a vytvořím tak komplet
+if [ "$jazyk" = "en" ]; then
+  # Ukončím server pro syntézu
+  pkill mimic3-server
+fi
+
+# Nakonec spojím pomocí ffmpeg dílčí segmenty a vytvořím tak komplet
 ffmpeg -f concat --safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
 rm -rf $TMPDIR/ 2>/dev/null
