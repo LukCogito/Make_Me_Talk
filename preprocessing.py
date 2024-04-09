@@ -188,7 +188,9 @@ if __name__ == "__main__":
         zmensi_pismena(cesta)
         nahrad_cisla_slovy(cesta)
         nahrad_spec_znaky(cesta, slovnik)
+        odstran_prazdne_radky(cesta)
     else:
         print("Processing Czech text")
         nahrad_cisla_slovy(cesta)
         nahrad_spec_znaky(cesta, slovnik)
+        odstran_prazdne_radky(cesta)
