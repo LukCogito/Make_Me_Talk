@@ -151,7 +151,7 @@ def odstran_prazdne_radky(cesta):
         soubor.writelines(text)
     print(f"Prázdné řádky byly odstraněny ze souboru v {cesta}.")
 
-def preved_do_latin1(cesta, encoding='utf-8'):
+def preved_do_kodovani(cesta, encoding='utf-8'):
     # Načtu si textový soubor do proměnné podle cesty
     with open(cesta, 'r') as soubor:
         text = soubor.read()
@@ -197,5 +197,5 @@ if __name__ == "__main__":
     zmensi_pismena(cesta)
     nahrad_cisla_slovy(cesta)
     nahrad_spec_znaky(cesta, slovnik)
-    preved_do_latin1(cesta)
+    preved_do_kodovani(cesta, encoding=ENCODING)
     odstran_prazdne_radky(cesta)
