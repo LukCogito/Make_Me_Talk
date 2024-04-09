@@ -46,7 +46,8 @@ if [ "$jazyk" = "cs" ]; then
 # V opačném příápadě
 else
   # Spustím server pro syntézu
-  mimic3-server --preload-voice /usr/share/mycroft/mimic3/voices/n_UK/apope_low &
+  mimic3-server --preload-voice en_UK/apope_low &
+  sleep 5
   # Připrav příkaz pro syntézu v angličtině
   cmd='echo "${radky[$i]}" | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
 fi
