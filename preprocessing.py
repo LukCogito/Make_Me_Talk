@@ -146,7 +146,7 @@ def odstran_prazdne_radky(cesta):
     with open(cesta, 'r') as soubor:
         text = soubor.readlines()
         # Použiji lamda (syntax pro zápis fce na jednu řádku) k filtrování prázdných řádek; převádím na list, protože filter vrací jiný datový typ
-    text = list(filter(lambda s: s != "\n"))
+    text = list(filter(lambda s: s != "\n", text))
     with open(cesta, 'w') as soubor:
         soubor.writelines(text)
     print(f"Prázdné řádky byly odstraněny ze souboru v {cesta}.")
