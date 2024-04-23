@@ -192,10 +192,11 @@ if __name__ == "__main__":
     slovnik = slovnik_en if jazyk == "en" else slovnik_cs
 
     # Vykonám odpovídající operace
-    ENCODING="latin-1"
+    ENCODING="utf-8"
+    #ENCODING="latin-1"
     print(f"Zpracovávám soubor '{cesta}'... v jazyce {jazyk}")
     zmensi_pismena(cesta)
     nahrad_cisla_slovy(cesta)
     nahrad_spec_znaky(cesta, slovnik)
-    preved_do_kodovani(cesta, encoding=ENCODING)
+    #preved_do_kodovani(cesta, encoding=ENCODING)
     odstran_prazdne_radky(cesta)
