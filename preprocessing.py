@@ -119,7 +119,7 @@ def zmensi_pismena(cesta):
     print(f"Znaky v souboru '{cesta}' byly nahrazeny a změny uloženy.")
     
 # Definice fce pro nahrazení čísel jejich přepisem slovy
-def nahrad_cisla_slovy(cesta):
+def nahrad_cisla_slovy(cesta, jazyk):
     # Načtu si textový soubor do proměnné podle cesty
     with open(cesta, 'r') as soubor:
         text = soubor.read()
@@ -130,7 +130,7 @@ def nahrad_cisla_slovy(cesta):
     # Definuji pod-funkci pro nahrazení shodujícího se vzorce čísly převedenými na slova
     def nahrad_cislo(shoda):
         cislo = int(shoda.group())
-        return num2words(cislo, lang=sys.argv[1])
+        return num2words(cislo, lang=jazyk)
 
     # Použiji metodu .sub() k nahrazení shodujících se čísel v textu
     vysledek = re.sub(reg_vyraz, nahrad_cislo, text)
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     #ENCODING="latin-1"
     print(f"Zpracovávám soubor '{cesta}'... v jazyce {jazyk}")
     zmensi_pismena(cesta)
-    nahrad_cisla_slovy(cesta)
+    nahrad_cisla_slovy(cesta, jazyk)
     nahrad_spec_znaky(cesta, slovnik)
     #preved_do_kodovani(cesta, encoding=ENCODING)
     odstran_prazdne_radky(cesta)
