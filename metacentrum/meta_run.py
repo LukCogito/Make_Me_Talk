@@ -23,13 +23,13 @@ def qsub(script_path, out_dir, script_params={}, dry_run=False):
     output = stream.read()
     return output
 
-home_dir = os.path.expanduser("~")
-metarunner_dir = home_dir + "/metalogs"
-outdir = f"{metarunner_dir}/{datetime.now().strftime('%y-%m-%d/%H-%M')}"
-
 if len(sys.argv) < 4:
     print("Usage: python3 meta_run.py <script> <book_path> <lang> [<dry_run>=False|True]")
     sys.exit(1)
+
+home_dir = os.path.expanduser("~")
+metarunner_dir = home_dir + "/metalogs"
+outdir = f"{metarunner_dir}/{datetime.now().strftime('%y-%m-%d/%H-%M')}"
 
 script_name = sys.argv[1]       # will be used later, once there's script for coquiAI
 script_name = f"{os.path.dirname(os.path.abspath(__file__))}/meta_job_script.sh"
@@ -42,6 +42,18 @@ dry_run = False if len(sys.argv) < 5 else (sys.argv[4].lower() == "true")
 
 script_name = os.path.abspath(script_name)
 params["BOOK"] = os.path.abspath(params["BOOK"])
+
+if not os.path.exists(params["BOOK"]):
+    print(f"Error: File '{params['BOOK']}' not found.", file=sys.stderr)
+    sys.exit(1)
+
+if params["LANG"] not in ["en", "cs"]:
+    print(f"Error: Invalid language '{params['LANG']}'; language must be 'en' or 'cs'.", file=sys.stderr)
+    sys.exit(1)
+
+if not os.path.exists(script_name):
+    print(f"Error: File '{script_name}' not found.", file=sys.stderr)
+    sys.exit(1)
 
 try:
     print(qsub(script_name, outdir, params, dry_run=dry_run))
