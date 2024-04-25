@@ -8,6 +8,7 @@ def qsub(script_path, out_dir, script_params={}, dry_run=False):
     :param script_name: Name of the script to run
     :param out_dir: Directory to run the script in
     :param qsub_args: Arguments to pass to qsub
+    :param dry_run: If True, return the command instead of running it
     :return: Output from qsub -- job ID
     """
     script_params = ','.join([f"{k}=\"{v}\"" for k, v in script_params.items()])
