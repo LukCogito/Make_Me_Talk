@@ -47,9 +47,11 @@ if [ "$jazyk" = "cs" ]; then
 else
   # Spustím server pro syntézu
   mimic3-server --preload-voice en_UK/apope_low &
-  sleep 5
+  sleep 5 # čekám 5 sekund, než se server zapne
+
   # Připrav příkaz pro syntézu v angličtině
-  cmd='echo "${radky[$i]}" | iconv -f UTF-8 -t ISO-8859-1//IGNORE 2>/dev/null | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
+  # https://community.openconversational.ai/t/encoding-issue-with-mimic3-server-latin-1-vs-utf-8/13980
+  cmd='echo "${radky[$i]}" | iconv -f UTF-8 -t ISO-8859-1//TRANSLIT 2>/dev/null | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
 fi
 
 # optional feature: paralelizace ??

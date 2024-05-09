@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # TODO: pipeline pro nahrání do MC
-# TODO: použít `mimic3-server --preload-voice /usr/share/mycroft/mimic3/voices/n_UK/apope_low` a `mimic3 --remote`
 
 # https://superuser.com/questions/708462/alias-scoping-in-bash-functions
 shopt -s expand_aliases
@@ -17,6 +16,7 @@ alias ffmpeg='/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86
 
 #https://github.com/danielgatis/rembg/issues/448
 export OMP_NUM_THREADS=$(nproc)
+
 export OUTDIR="$HOME/Make_Me_Talk/ebook_synthesis"
 
 cd ..
