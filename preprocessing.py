@@ -194,6 +194,7 @@ if __name__ == "__main__":
     # Vykonám odpovídající operace
     ENCODING="utf-8"
     #ENCODING="latin-1"
+    #ENCODING="ascii"
     print(f"Zpracovávám soubor '{cesta}'... v jazyce {jazyk}")
     zmensi_pismena(cesta)
     nahrad_cisla_slovy(cesta, jazyk)

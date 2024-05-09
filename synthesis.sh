@@ -49,7 +49,7 @@ else
   mimic3-server --preload-voice en_UK/apope_low &
   sleep 5
   # Připrav příkaz pro syntézu v angličtině
-  cmd='echo "${radky[$i]}" | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
+  cmd='echo "${radky[$i]}" | iconv -f UTF-8 -t ISO-8859-1//IGNORE 2>/dev/null | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
 fi
 
 # optional feature: paralelizace ??
