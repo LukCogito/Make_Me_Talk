@@ -33,8 +33,9 @@ mapfile -t radky < "$cesta_vstup"
 # Extrahuji z cesty název souboru bez přípony
 jmeno_souboru=$(basename -s .txt "$cesta_vstup")
 
-# Vytvořím cestu k výstupnímu souboru
+# Vytvořím cestu k výstupnímu souboru a dočasnému adresáři
 mkdir -p $OUTDIR
+mkdir -p $TMPDIR
 cesta_vystup="$OUTDIR/${jmeno_souboru}.wav"
 
 echo "Cesta k výstupnímu souboru: $cesta_vystup"
