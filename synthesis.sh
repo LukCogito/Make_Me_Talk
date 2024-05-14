@@ -63,7 +63,7 @@ fi
 # Procházím pole položku po položce (procházím text řádku po řádce)
 for (( i=0; i<${#radky[@]}; i++ )); do
   # Pro každou jednu iteraci provedu syntézu a indexovaný výstup uložím do adresáře temp
-  $(eval $cmd)
+  eval $cmd
   echo  "file '$TMPDIR/audio${i}.wav'" >> $TMPDIR/concat.txt
 done
 
