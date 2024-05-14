@@ -64,7 +64,9 @@ fi
 for (( i=0; i<${#radky[@]}; i++ )); do
   # Pro každou jednu iteraci provedu syntézu a indexovaný výstup uložím do adresáře temp
   eval $cmd
-  echo  "file '$TMPDIR/audio${i}.wav'" >> $TMPDIR/concat.txt
+    #echo  "file '$TMPDIR/audio${i}.wav'" >> $TMPDIR/concat.txt
+    # Používat relativní cesty -- budou relativní vůci $TMPDIR/concat.txt
+  echo  "file 'audio${i}.wav'" >> $TMPDIR/concat.txt
 done
 
 if [ "$jazyk" = "en" ]; then
@@ -73,5 +75,7 @@ if [ "$jazyk" = "en" ]; then
 fi
 
 # Nakonec spojím pomocí ffmpeg dílčí segmenty a vytvořím tak komplet
-ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
+  #ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
+  # S relativními cestami uvnitř concat.txt nemusím používat -safe 0
+ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup
 rm -rf $TMPDIR/ 2>/dev/null
