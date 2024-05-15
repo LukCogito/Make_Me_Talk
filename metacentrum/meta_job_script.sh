@@ -19,5 +19,6 @@ cd $HOME/Make_Me_Talk/metacentrum
 singularity exec              \
      -B /cvmfs                \
     --pid                     \
+    --net                     \
     docker://mycroftai/mimic3 \
     /bin/bash meta_singularity_script.sh $BOOK $LANG
