@@ -81,7 +81,7 @@ fi
 # Nakonec spojím pomocí ffmpeg dílčí segmenty a vytvořím tak komplet
   #ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
   # S relativními cestami uvnitř concat.txt nemusím používat -safe 0
-ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup
+ffmpeg -f concat -i $TMPDIR/concat.txt -c copy $cesta_vystup -y
 if [ $vycistit_tmp ]; then
   rm -rf $TMPDIR/ 2>/dev/null
 fi
