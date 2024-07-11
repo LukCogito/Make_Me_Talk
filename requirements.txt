@@ -1,0 +1,2 @@
+nltk
+piper-tts

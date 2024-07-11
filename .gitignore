@@ -1,5 +1,6 @@
+/texts
 /data
-/synthesis_output
-metalogs
+/voices
+/metalogs
+/ebook_synthesis
 __pycache__
-ebook_synthesis
