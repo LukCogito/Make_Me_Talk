@@ -3,18 +3,20 @@
 import sys
 import nltk
 
-nltk.download('punkt')
+#nltk.download('punkt')
 
-# Definice fce pro odstranění prázdných řádek v textu
-def odstran_prazdne_radky(path):
-    # Načtu si textový file do proměnné podle cesty
+def remove_empty_lines(path):
+    
     with open(path, 'r') as file:
         text = file.readlines()
-        # Použiji lamda (syntax pro zápis fce na jednu řádku) k filtrování prázdných řádek; převádím na list, protože filter vrací jiný datový typ
+
     text = list(filter(lambda s: s != "\n", text))
+
     with open(path, 'w') as file:
         file.writelines(text)
-    print(f"Prázdné řádky byly odstraněny ze fileu v {path}.")
+
+    print(f"Empty lines deleted in {path}.")
+
 
 def split_long_lines(path):
 
@@ -22,56 +24,61 @@ def split_long_lines(path):
         text = file.read()
         text_split = text.splitlines()
 
-        for line in text_split:
+        for line, index_line in zip(text_split, range(len(text_split))):
             
-            # 1000 chars is value under upper threshold that piper can synthesise for one epoch
-            if len(line) >= 1000:
-                sentences = nltk.sent_tokenize()
-                sentences.reverse()
+            # 3000 chars is value under upper threshold that piper can synthesise for one epoch
+            if len(line) >= 3000:
+                # Split line to sentences
+                sentences = nltk.sent_tokenize(line)
+                counter = 0
 
-                for index in len(words)-1:
-    
-                    if words.reverse()[index] == ".":
-                        words_reversed = words.reverse()
-                        words_reversed.insert(index-1, "\n")
-                        words = words_reversed.reverse()
-                        line = " ".join(words)
+                for sentence, index_sentence in zip(sentences, range(len(sentences))):
+                    counter += len(sentence)
+
+                    if counter >= 3000:
+                        sentences.insert(index_sentence, "\n")
+                        counter = 0
+
+                text_split[index_line] = " ".join(sentences)
 
         text = "\n".join(text_split)
-        return text
+
+    with open(path, "w") as file:
+        file.write(text)
+
+    print(f"Lines longer than 1000 splitted to multiple lines in {path}.")
 
 
-# Pokud je skript spuštěn samostatně (a nikoliv jako modul)
+def strip_lines(path):
+
+    with open(path, "r") as file:
+        text_split = file.readlines()
+
+        for line, index in zip(text_split, range(len(text_split))):
+            text_split[index] = line.strip()
+    
+    with open(path, "w") as file:
+        text = "\n".join(text_split)
+        file.write(text)
+
+    print(f"White spaces removed in {path}")
+
+
 if __name__ == "__main__":
-    # Ověřím správnost zadaných argumentů
-    # Pokud je argumentů méně než 3
-    if len(sys.argv) < 3:
-        # Vypíši uživateli hlášku s instruktáží
-        print("Usage: python3 preprocessing.py <language> <input_file>")
-        # A ukončím s hláškou o přítomnosti problému (1 = je přítomen)
-        sys.exit(1)
-    # Pokud druhý argument (jazyk) není en nebo cz
-    path, jazyk = sys.argv[1], sys.argv[2]
-    if jazyk not in ["en", "cz"]:
-        # Vypíši uživateli hlášku s instruktáží
-        print(f"Invalid language '{jazyk}'; language must be 'en' or 'cz'.")
-        sys.exit(1)
-        # A ukončím s hláškou o přítomnosti problému
+    if len(sys.argv) != 2:
+        print("Usage: python3 preprocessing.py <input_file>")
+        exit(1)
 
-    # Otestuji, jestli zadaný file existuje
+    path = sys.argv[1]
+
     try:
-        # Zkusím obsah fileu načíst do proměnné
-        with open(path, 'r', encoding='utf-8') as file:
+        with open(path, 'r') as file:
             pass
-    # V případě výjimky vypíšu hlášku o chybě pro uživatele
     except FileNotFoundError:
         print(f"File '{path}' not found.")
-        sys.exit(1)
+        exit(1)
 
-
-    # Zvolím odpovídající slovník v závislosti na volbě jazyka
-    dict = dict_en if jazyk == "en" else dict_cs
-
-    # Vykonám odpovídající operace
-    print(f"Zpracovávám file '{path}'... v jazyce {jazyk}")
-    odstran_prazdne_radky(path)
+    print(f"Editing file '{path}'...")
+    remove_empty_lines(path)
+    split_long_lines(path)
+    strip_lines(path)
