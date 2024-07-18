@@ -1,79 +1,88 @@
 #!/bin/bash
 
-# Cesta k souboru s knihou je prvním parametrem
-cesta_vstup=$1
+# Arguments
+input_path=$1
+language=$2
+# Optional argument with default value
+gender="${3:-male}"
 
-# Jazyk modelu pro syntézu je druhým parametrem
-jazyk=$2
-
-# Ověřím správnost zadaných parametrů
+# Check number of arguments
 if [ $# -lt 2 ]; then
-    echo "Usage: ./synthesis.sh <input_file> <language>" >&2
+    echo "Usage: ./synthesis.sh <input_file> <language> <gender=male>" >&2
     exit 1
-elif [ ! -f "${cesta_vstup}" ]; then
-    echo "Input file ${cesta_vstup} does not exist." >&2
-    exit 1
-else
-    case "$jazyk" in
-        en | cs ) ;;
-        * ) echo "Invalid language '$jazyk'; must be 'en' or 'cs'" >&2; exit 1;;
-    esac
 fi
 
+# Check if input file exists
+if [ ! -f "${input_path}" ]; then
+    echo "Input file ${input_path} does not exist." >&2
+    exit 1
+fi
+
+# Validate language and gender
+case "$language" in
+    en | cs ) ;;
+    * ) echo "Invalid language '$language'; must be 'en' or 'cs'" >&2; exit 1;;
+esac
+
+case "$gender" in
+    male | female ) ;;
+    * ) echo "Invalid gender '$gender'; in universe of this script, gender must be 'male' or 'female'" >&2; exit 1;;
+esac
+
+# Set temporary and output directories
 if [ -z "$TMPDIR" ]; then
   TMPDIR="./data/tmp"
 fi
 if [ -z "$OUTDIR" ]; then
-  OUTDIR="./ebook_synthesis"
+  OUTDIR="./synthesis"
 fi
 
-# Namapuji obsah txt souboru do pole, kde bude každá jedna řádka samostatným prvkem
-mapfile -t radky < "$cesta_vstup"
+# Map the content of the txt file into an array
+mapfile -t lines < "$input_path"
 
-# Extrahuji z cesty název souboru bez přípony
-jmeno_souboru=$(basename -s .txt "$cesta_vstup")
+# Extract filename without extension
+file_name=$(basename -s .txt "$input_path")
 
-# Vytvořím cestu k výstupnímu souboru a dočasnému adresáři
 mkdir -p $OUTDIR
 mkdir -p $TMPDIR
-cesta_vystup="$OUTDIR/${jmeno_souboru}.wav"
+mkdir -p "./voices/"
+output_path="$OUTDIR/${file_name}.wav"
 
-echo "Cesta k výstupnímu souboru: $cesta_vystup"
+echo "A path to the output file: $output_path"
 
-# Pokud je kniha česky
-if [ "$jazyk" = "cs" ]; then
-  # Připrav příkaz pro syntézu v češtině
-  cmd='echo "${radky[$i]}" | piper   --model cs_CZ-jirka-medium   --output_file "$TMPDIR/audio${i}.wav"'
-  echo $cmd
-# V opačném příápadě
+# Choose TTS model based on language and gender
+if [ "$language" = "cs" ]; then
+  if [ ! -f "./voices/cs_CZ-jirka-medium.onnx" ]; then
+    wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx
+    wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json
+  fi
+  cmd='echo "${lines[$i]}" | piper --model ./voices/cs_CZ-jirka-medium.onnx --output_file "$TMPDIR/audio${i}.wav"'
 else
-  # Spustím server pro syntézu
-  mimic3-server --preload-voice en_UK/apope_low &
-  sleep 5 # čekám 5 sekund, než se server zapne
-
-  # Připrav příkaz pro syntézu v angličtině
-  # https://community.openconversational.ai/t/encoding-issue-with-mimic3-server-latin-1-vs-utf-8/13980
-  cmd='echo "${radky[$i]}" | iconv -f UTF-8 -t ISO-8859-1//TRANSLIT 2>/dev/null | mimic3 --remote > "$TMPDIR/audio${i}.wav"'
+  if [ "$gender" = "male" ]; then
+    if [ ! -f "./voices/en_GB-alan-medium.onnx" ]; then
+      wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx
+      wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json
+    fi
+    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-alan-medium.onnx --output_file "$TMPDIR/audio${i}.wav"'
+  else
+    if [ ! -f "./voices/en_GB-cori-high.onnx" ]; then
+      wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/high/en_GB-cori-high.onnx
+      wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/high/en_GB-cori-high.onnx.json
+    fi
+    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-cori-high.onnx --output_file "$TMPDIR/audio${i}.wav"'
+  fi
 fi
 
-# optional feature: paralelizace ??
-#cmd=$cmd' && echo "file $TMPDIR/audio${i}.wav" >> $TMPDIR/concat.txt'
-# pokud paralelizace, tak zde
-# cmd=$cmd' &'
-
-# Procházím pole položku po položce (procházím text řádku po řádce)
-for (( i=0; i<${#radky[@]}; i++ )); do
-  # Pro každou jednu iteraci provedu syntézu a indexovaný výstup uložím do adresáře temp
+# Generate audio files and create a list for concatenation
+for (( i=0; i<${#lines[@]}; i++ )); do
   eval $cmd
-  echo  "file 'audio${i}.wav'" >> $TMPDIR/concat.txt
-
+  echo "file 'audio${i}.wav'" >> $TMPDIR/concat.txt
 done
 
-if [ "$jazyk" = "en" ]; then
-  # Ukončím server pro syntézu
-  pkill mimic3-server
-fi
+# Concatenate audio files using ffmpeg
+ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $output_path
 
-# Nakonec spojím pomocí ffmpeg dílčí segmenty a vytvořím tak komplet
-ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $cesta_vystup
-#rm -rf $TMPDIR/ 2>/dev/null
+# Clean up temporary directory
+if [ -f $output_path ]; then
+    rm -rf $TMPDIR/ 2>/dev/null
+fi
