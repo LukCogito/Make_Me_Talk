@@ -1,4 +1,12 @@
 #!/bin/bash
+# Bash script for tts synthesis with piper
+# An author:
+#  _          _       ____            _ _        
+# | |   _   _| | __  / ___|___   __ _(_) |_ ___  
+# | |  | | | | |/ / | |   / _ \ / _` | | __/ _ \ 
+# | |__| |_| |   <  | |__| (_) | (_| | | || (_) |
+# |_____\__,_|_|\_\  \____\___/ \__, |_|\__\___/ 
+#                               |___/
 
 # Arguments
 input_path=$1
@@ -56,20 +64,20 @@ if [ "$language" = "cs" ]; then
     wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx
     wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/cs/cs_CZ/jirka/medium/cs_CZ-jirka-medium.onnx.json
   fi
-  cmd='echo "${lines[$i]}" | piper --model ./voices/cs_CZ-jirka-medium.onnx --output_file "$TMPDIR/audio${i}.wav"'
+  cmd='echo "${lines[$i]}" | piper --model ./voices/cs_CZ-jirka-medium.onnx --sentence-silence 1.2 --length-scale 0.75 --output_file "$TMPDIR/audio${i}.wav"'
 else
   if [ "$gender" = "male" ]; then
     if [ ! -f "./voices/en_GB-alan-medium.onnx" ]; then
       wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx
       wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx.json
     fi
-    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-alan-medium.onnx --output_file "$TMPDIR/audio${i}.wav"'
+    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-alan-medium.onnx --sentence-silence 1.2 --output_file "$TMPDIR/audio${i}.wav"'
   else
     if [ ! -f "./voices/en_GB-cori-high.onnx" ]; then
       wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/high/en_GB-cori-high.onnx
       wget -P ./voices/ https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/high/en_GB-cori-high.onnx.json
     fi
-    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-cori-high.onnx --output_file "$TMPDIR/audio${i}.wav"'
+    cmd='echo "${lines[$i]}" | piper --model ./voices/en_GB-cori-high.onnx --sentence-silence 1.2 --length-scale 1.5 --output_file "$TMPDIR/audio${i}.wav"'
   fi
 fi
 

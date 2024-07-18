@@ -1,4 +1,11 @@
 # A set of Python scripts for editing text file with e-book to form, suitable for a synthesis with Piper dialog system
+# An author:
+#  _          _       ____            _ _        
+# | |   _   _| | __  / ___|___   __ _(_) |_ ___  
+# | |  | | | | |/ / | |   / _ \ / _` | | __/ _ \ 
+# | |__| |_| |   <  | |__| (_) | (_| | | || (_) |
+# |_____\__,_|_|\_\  \____\___/ \__, |_|\__\___/ 
+#                               |___/
 
 import sys
 import nltk
