@@ -77,10 +77,15 @@ fi
 for (( i=0; i<${#lines[@]}; i++ )); do
   eval $cmd
   echo "file 'audio${i}.wav'" >> $TMPDIR/concat.txt
+  current_line=$((i + 1))
+  # https://www.howtogeek.com/floating-point-math-in-linux-bash/
+  ratio=$(echo "scale=2; $current_line/${#lines[@]}" | bc)
+  percent=$(echo "$ratio * 100" | bc)
+  echo "$current_line lines out of ${#lines[@]} ($percent %)"
 done
 
 # Concatenate audio files using ffmpeg
-ffmpeg -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $output_path
+ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i $TMPDIR/concat.txt -c copy $output_path
 
 # Clean up temporary directory
 if [ -f $output_path ]; then
