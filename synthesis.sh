@@ -14,6 +14,9 @@ language=$2
 # Optional argument with default value
 gender="${3:-male}"
 
+# https://stackoverflow.com/questions/8903239/how-can-i-calculate-time-elapsed-in-a-bash-script
+SECONDS=0
+
 # Check number of arguments
 if [ $# -lt 2 ]; then
     echo "Usage: ./synthesis.sh <input_file> <language> <gender=male>" >&2
@@ -99,3 +102,10 @@ ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i $TMPDIR/concat.txt -c c
 if [ -f $output_path ]; then
     rm -rf $TMPDIR/ 2>/dev/null
 fi
+
+# https://stackoverflow.com/questions/8903239/how-can-i-calculate-time-elapsed-in-a-bash-script
+# https://stackoverflow.com/questions/12199631/convert-seconds-to-hours-minutes-seconds
+duration=$(date -d @$SECONDS -u +%H:%M:%S)
+
+echo "The output saved to: $output_path"
+echo "We are finished; the synthesis took $duration."
